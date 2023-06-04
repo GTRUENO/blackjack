@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <button onclick="hit()" class="hit-btn">hit</button>
+    <button onclick="startGame()"class="start-btn">start</button>
+
+</html>
+
+<head>
+    <title>블랙잭 카드 게임</title>
+    <style>
+        .start-btn {
+            width: 100px;
+            height: 60px;
+            font-size: 14px;
+        }
+        .hit-btn {
+            width: ;
+            height: ;
+            font-size: ;
+        }
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 100px;
+            height: 150px;
+            background-color: lightgray;
+            border: 1px solid gray;
+            border-radius: 5px;
+            margin: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cards">
+
+    </div>
+
+    <script>
+        var cardValues = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+        var suits =  ['♠', '♣', '♥', '♦'];
+        var cards = [];
+        var dealer = [];
+        var player = [];
+        var cardCount = 52; // 정우
+        var cardContainer = document.querySelector('.cards');
+        var dealerNowCard = 0; //철욱 - 실시간 카드 집계. 나중에 카드 집계할때만 이거 띄워주면 됩니다
+        var playerNowCard = 0; //철욱 - 실시간 플레이어 카드. 얘는 상시로 보이는거
+        var cardNum = [];//철욱 - 카드에서 숫자만 따는 배열(계산용)
+
+
+        for (var i = 0; i < suits.length; i++) {
+            for (var j = 0; j < cardValues.length; j++) {
+                var card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = suits[i] + cardValues[j] ; //철욱 -  카드 형태 수정 value 와 suits의 위치 바꿈. 카드 합산할때 앞에 기호만 때고 숫자들만 더하기 위함
+                cards.push(suits[i] + cardValues[j]); //정우(수정) + 철욱 - 위치교환(상동)
+                cardContainer.appendChild(card);
+            }
+        }
+        //정우 (startGame을 누르면 카드를 랜덤하게 뽑은 후 플레이어와 딜러에게 배정
+        // hit를 누르면 플레이어가 카드를 또 받음 stay버튼은 나중에 구현 바람)
+       
+    function cardDraw(){
+        var drawNum = Math.floor(Math.random()*cardCount);
+        var drawCard = cards[drawNum];
+        cards.splice(drawNum,1); // drawNum에 들어간 값을 하나 지운다
+        cardCount--;
+        console.log(drawCard);
+        return drawCard;
+    }
+
+    function startGame(){
+        
+        for(i = 0; i < 2; i++){
+            dealer.push(cardDraw());
+            player.push(cardDraw());
+        }
+
+    }
+    function hit(){
+        player.push(cardDraw());
+    }
+    //철욱
+    function CardCal(){ //철욱 - 현재 카드들의 총합을 계산
+        var cardD = 0; //철욱 - 임시로 쓰는 딜러 카드 집계용
+        var cardP = 0; //철욱 - 임시로 쓰는 플레이어 카드 집계용
+        for (i = 0; i >= dealer.length; i++){
+            let searchCard = dealer.indexOf(i);
+            let splitCard = searchCard.substring(1);//철욱 - 앞에 기호만 잘라내고 1부터
+            if (splitCard = A)
+                splitCard = 1;
+            else if(splitCard == J ||splitCard == Q||splitCard == K)
+                splitCard = 10;
+            cardD += splitCard;
+        }
+        for (i = 0; i >= player.length; i++){
+            let searchCard = player.indexOf(i);
+            let splitCard = searchCard.substring(1); // 철욱 - 앞에 기호만 잘라내고 1부터
+            if (splitCard = A) 
+                splitCard = 1;
+            else if (splitCard == J || splitCard == Q || splitCard == K) 
+                splitCard = 10;
+            cardP += splitCard;
+        }
+        var dealerNowCard = cardD; //철욱 - 임시로 계산한 값을 전역 변수(실시간 카드값)에 갱신
+        var playerNowCard = cardP;
+    }
+
+    
+
+    
+    </script>
+</body>
